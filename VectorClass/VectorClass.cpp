@@ -94,23 +94,58 @@ public:
 		}
 		cout << endl;
 	}
+
+	void setSize(int size) {
+		this->size = size;
+		arr = new T[size];
+	}
+	int getSize() {
+		return size;
+	}
+};
+
+class myException : public exception {
+private:
+	string message;
+public:
+	myException(string message) { this->message = message; }
+	const char* what() const noexcept override {
+		return message.c_str();
+	}
 };
 
 int main()
 {
-	VectorClass<int> vec;
-	vec.push_back(1);
-	vec.push_back(2);
-	vec.push_back(3);
-	vec.push_back(4);
-	vec.push_back(5);
-	vec.SHow();
-	vec.pop_back();
-	vec.SHow();
-	vec.swap(0, 3);
-	vec.SHow();
-	vec.begin();
-	vec.end();
-	vec.insert(2, 10);
-	vec.SHow();
+	try {
+		VectorClass<int> vec;
+		vec.push_back(1);
+		vec.push_back(2);
+		vec.push_back(3);
+		vec.SHow();
+		vec.pop_back();
+		vec.SHow();
+		vec.insert(1, 4);
+		vec.SHow();
+		vec.swap(0, 1);
+		vec.SHow();
+		vec.begin();
+		vec.end();
+		int serch_index;
+		cout << "Enter index of number to search: ";
+		cin >> serch_index;
+		bool founded = false;
+		for (int i = 0; i < vec.getSize(); i++) {
+			if (i == serch_index) {
+				cout << "Number found: " << i << endl;
+				founded = true;
+				break;
+			}
+		}
+		if (!founded) {
+			throw myException("Number not found");
+		}
+	}
+	catch (myException e) {
+		cout << e.what() << endl;
+	}
 }
